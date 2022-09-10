@@ -1235,9 +1235,6 @@
 		};
 	
 	// "On Visible" animations.
-		onvisible.add('.image.style3', { style: 'fade-up', speed: 750, intensity: 4, delay: 0, replay: false });
-		onvisible.add('h1.style4, h2.style4, h3.style4, p.style4', { style: 'fade-left', speed: 750, intensity: 5, delay: 0, replay: false });
-		onvisible.add('h1.style1, h2.style1, h3.style1, p.style1', { style: 'fade-left', speed: 750, intensity: 5, delay: 0, replay: false });
 		onvisible.add('.buttons.style1', { style: 'fade-up', speed: 1000, intensity: 4, delay: 0, replay: false });
 
 })();
