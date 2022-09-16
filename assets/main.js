@@ -425,7 +425,7 @@
 	
 				setTimeout(function() {
 					$body.className = $body.className.replace(/\bis-playing\b/, 'is-ready');
-				}, 500);
+				}, 1000);
 			}, 100);
 		});
 	
@@ -758,483 +758,102 @@
 		// Initialize.
 			scrollEvents.init();
 	
-	// "On Visible" animation.
-		var onvisible = {
+	// Deferred.
+		(function() {
 	
-			/**
-			 * Effects.
-			 * @var {object}
-			 */
-			effects: {
-				'blur-in': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'filter ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.opacity = 0;
-						this.style.filter = 'blur(' + (0.25 * intensity) + 'rem)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.filter = 'none';
-					},
-				},
-				'zoom-in': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transform = 'scale(' + (1 - ((alt ? 0.25 : 0.05) * intensity)) + ')';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'zoom-out': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transform = 'scale(' + (1 + ((alt ? 0.25 : 0.05) * intensity)) + ')';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'slide-left': {
-					transition: function (speed, delay) {
-						return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function() {
-						this.style.transform = 'translateX(100vw)';
-					},
-					play: function() {
-						this.style.transform = 'none';
-					},
-				},
-				'slide-right': {
-					transition: function (speed, delay) {
-						return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function() {
-						this.style.transform = 'translateX(-100vw)';
-					},
-					play: function() {
-						this.style.transform = 'none';
-					},
-				},
-				'flip-forward': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transformOrigin = '50% 50%';
-						this.style.transform = 'perspective(1000px) rotateX(' + ((alt ? 45 : 15) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'flip-backward': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transformOrigin = '50% 50%';
-						this.style.transform = 'perspective(1000px) rotateX(' + ((alt ? -45 : -15) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'flip-left': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transformOrigin = '50% 50%';
-						this.style.transform = 'perspective(1000px) rotateY(' + ((alt ? 45 : 15) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'flip-right': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transformOrigin = '50% 50%';
-						this.style.transform = 'perspective(1000px) rotateY(' + ((alt ? -45 : -15) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'tilt-left': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transform = 'rotate(' + ((alt ? 45 : 5) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'tilt-right': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity, alt) {
-						this.style.opacity = 0;
-						this.style.transform = 'rotate(' + ((alt ? -45 : -5) * intensity) + 'deg)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'fade-right': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.opacity = 0;
-						this.style.transform = 'translateX(' + (-1.5 * intensity) + 'rem)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'fade-left': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.opacity = 0;
-						this.style.transform = 'translateX(' + (1.5 * intensity) + 'rem)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'fade-down': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.opacity = 0;
-						this.style.transform = 'translateY(' + (-1.5 * intensity) + 'rem)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'fade-up': {
-					transition: function (speed, delay) {
-						return	'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.opacity = 0;
-						this.style.transform = 'translateY(' + (1.5 * intensity) + 'rem)';
-					},
-					play: function() {
-						this.style.opacity = 1;
-						this.style.transform = 'none';
-					},
-				},
-				'fade-in': {
-					transition: function (speed, delay) {
-						return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function() {
-						this.style.opacity = 0;
-					},
-					play: function() {
-						this.style.opacity = 1;
-					},
-				},
-				'fade-in-background': {
-					custom: true,
-					transition: function (speed, delay) {
+			var items = $$('.deferred'),
+				loadHandler, enterHandler;
 	
-						this.style.setProperty('--onvisible-speed', speed + 's');
+			// Handlers.
 	
-						if (delay)
-							this.style.setProperty('--onvisible-delay', delay + 's');
+				/**
+				 * "On Load" handler.
+				 */
+				loadHandler = function() {
 	
-					},
-					rewind: function() {
-						this.style.removeProperty('--onvisible-background-color');
-					},
-					play: function() {
-						this.style.setProperty('--onvisible-background-color', 'rgba(0,0,0,0.001)');
-					},
-				},
-				'zoom-in-image': {
-					target: 'img',
-					transition: function (speed, delay) {
-						return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function() {
-						this.style.transform = 'scale(1)';
-					},
-					play: function(intensity) {
-						this.style.transform = 'scale(' + (1 + (0.1 * intensity)) + ')';
-					},
-				},
-				'zoom-out-image': {
-					target: 'img',
-					transition: function (speed, delay) {
-						return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.transform = 'scale(' + (1 + (0.1 * intensity)) + ')';
-					},
-					play: function() {
-						this.style.transform = 'none';
-					},
-				},
-				'focus-image': {
-					target: 'img',
-					transition: function (speed, delay) {
-						return	'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' +
-								'filter ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
-					},
-					rewind: function(intensity) {
-						this.style.transform = 'scale(' + (1 + (0.05 * intensity)) + ')';
-						this.style.filter = 'blur(' + (0.25 * intensity) + 'rem)';
-					},
-					play: function(intensity) {
-						this.style.transform = 'none';
-						this.style.filter = 'none';
-					},
-				},
-			},
+					var i = this,
+						p = this.parentElement;
 	
-			/**
-			 * Adds one or more animatable elements.
-			 * @param {string} selector Selector.
-			 * @param {object} settings Settings.
-			 */
-			add: function(selector, settings) {
+					// Not "done" yet? Bail.
+						if (i.dataset.src !== 'done')
+							return;
 	
-				var style = settings.style in this.effects ? settings.style : 'fade',
-					speed = parseInt('speed' in settings ? settings.speed : 1000) / 1000,
-					intensity = ((parseInt('intensity' in settings ? settings.intensity : 5) / 10) * 1.75) + 0.25,
-					delay = parseInt('delay' in settings ? settings.delay : 0) / 1000,
-					offset = parseInt('offset' in settings ? settings.offset : 0),
-					mode = parseInt('mode' in settings ? settings.mode : 3),
-					replay = 'replay' in settings ? settings.replay : false,
-					stagger = 'stagger' in settings ? (parseInt(settings.stagger) / 1000) : false,
-					state = 'state' in settings ? settings.state : null,
-					effect = this.effects[style];
+					// Show image.
+						if (Date.now() - i._startLoad < 375) {
 	
-				// Step through selected elements.
-					$$(selector).forEach(function(e) {
+							p.classList.remove('loading');
+							p.style.backgroundImage = 'none';
+							i.style.transition = '';
+							i.style.opacity = 1;
 	
-						var	children = (stagger !== false) ? e.querySelectorAll(':scope > li, :scope ul > li') : null,
-							enter = function(staggerDelay=0) {
+						}
+						else {
 	
-								var	_this = this,
-									transitionOrig;
+							p.classList.remove('loading');
+							i.style.opacity = 1;
 	
-								// Target provided? Use it instead of element.
-									if (effect.target)
-										_this = this.querySelector(effect.target);
+							setTimeout(function() {
+								i.style.backgroundImage = 'none';
+								i.style.transition = '';
+							}, 375);
 	
-								// Not a custom effect?
-									if (!effect.custom) {
+						}
 	
-										// Save original transition.
-											transitionOrig = _this.style.transition;
+				};
 	
-										// Apply temporary styles.
-											_this.style.setProperty('backface-visibility', 'hidden');
+				/**
+				 * "On Enter" handler.
+				 */
+				enterHandler = function() {
 	
-										// Apply transition.
-											_this.style.transition = effect.transition(speed, delay + staggerDelay);
+					var	i = this,
+						p = this.parentElement,
+						src;
 	
-									}
+					// Get src, mark as "done".
+						src = i.dataset.src;
+						i.dataset.src = 'done';
 	
-								// Otherwise, call custom transition handler.
-									else
-										effect.transition.apply(_this, [speed, delay + staggerDelay]);
+					// Mark parent as loading.
+						p.classList.add('loading');
 	
-								// Play.
-									effect.play.apply(_this, [intensity, !!children]);
+					// Swap placeholder for real image src.
+						i._startLoad = Date.now();
+						i.src = src;
 	
-								// Not a custom effect?
-									if (!effect.custom)
-										setTimeout(function() {
+				};
 	
-											// Remove temporary styles.
-												_this.style.removeProperty('backface-visibility');
+			// Initialize items.
+				items.forEach(function(p) {
 	
-											// Restore original transition.
-												_this.style.transition = transitionOrig;
+					var i = p.firstElementChild;
 	
-										}, (speed + delay + staggerDelay) * 1000 * 2);
+					// Set parent to placeholder.
+						if (!p.classList.contains('enclosed')) {
 	
-							},
-							leave = function() {
+							p.style.backgroundImage = 'url(' + i.src + ')';
+							p.style.backgroundSize = '100% 100%';
+							p.style.backgroundPosition = 'top left';
+							p.style.backgroundRepeat = 'no-repeat';
 	
-								var	_this = this,
-									transitionOrig;
+						}
 	
-								// Target provided? Use it instead of element.
-									if (effect.target)
-										_this = this.querySelector(effect.target);
+					// Hide image.
+						i.style.opacity = 0;
+						i.style.transition = 'opacity 0.375s ease-in-out';
 	
-								// Not a custom effect?
-									if (!effect.custom) {
+					// Load event.
+						i.addEventListener('load', loadHandler);
 	
-										// Save original transition.
-											transitionOrig = _this.style.transition;
+					// Add to scroll events.
+						scrollEvents.add({
+							element: i,
+							enter: enterHandler,
+							offset: 250
+						});
 	
-										// Apply temporary styles.
-											_this.style.setProperty('backface-visibility', 'hidden');
+				});
 	
-										// Apply transition.
-											_this.style.transition = effect.transition(speed);
-	
-									}
-	
-								// Otherwise, call custom transition handler.
-									else
-										effect.transition.apply(_this, [speed]);
-	
-								// Rewind.
-									effect.rewind.apply(_this, [intensity, !!children]);
-	
-								// Not a custom effect?
-									if (!effect.custom)
-										setTimeout(function() {
-	
-											// Remove temporary styles.
-												_this.style.removeProperty('backface-visibility');
-	
-											// Restore original transition.
-												_this.style.transition = transitionOrig;
-	
-										}, speed * 1000 * 2);
-	
-							},
-							targetElement, triggerElement;
-	
-						// Initial rewind.
-	
-							// Determine target element.
-								if (effect.target)
-									targetElement = e.querySelector(effect.target);
-								else
-									targetElement = e;
-	
-							// Children? Rewind each individually.
-								if (children)
-									children.forEach(function(targetElement) {
-										effect.rewind.apply(targetElement, [intensity, true]);
-									});
-	
-							// Otherwise. just rewind element.
-								else
-									effect.rewind.apply(targetElement, [intensity]);
-	
-						// Determine trigger element.
-							triggerElement = e;
-	
-							// Has a parent?
-								if (e.parentNode) {
-	
-									// Parent is an onvisible trigger? Use it.
-										if (e.parentNode.dataset.onvisibleTrigger)
-											triggerElement = e.parentNode;
-	
-									// Otherwise, has a grandparent?
-										else if (e.parentNode.parentNode) {
-	
-											// Grandparent is an onvisible trigger? Use it.
-												if (e.parentNode.parentNode.dataset.onvisibleTrigger)
-													triggerElement = e.parentNode.parentNode;
-	
-										}
-	
-								}
-	
-						// Add scroll event.
-							scrollEvents.add({
-								element: e,
-								triggerElement: triggerElement,
-								offset: offset,
-								mode: mode,
-								initialState: state,
-								enter: children ? function() {
-	
-									var staggerDelay = 0;
-	
-									// Step through children.
-										children.forEach(function(e) {
-	
-											// Apply enter handler.
-												enter.apply(e, [staggerDelay]);
-	
-											// Increment stagger delay.
-												staggerDelay += stagger;
-	
-										});
-	
-								} : enter,
-								leave: (replay ? (children ? function() {
-	
-									// Step through children.
-										children.forEach(function(e) {
-	
-											// Apply leave handler.
-												leave.apply(e);
-	
-										});
-	
-								} : leave) : null),
-							});
-	
-					});
-	
-				},
-	
-		};
-	
-	// "On Visible" animations.
-		onvisible.add('.buttons.style1', { style: 'fade-up', speed: 1000, intensity: 4, delay: 0, replay: false });
+		})();
 
 })();
