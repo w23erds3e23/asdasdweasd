@@ -24,11 +24,32 @@ body:before {
 	transform: scale(1);
 	width: 100vw;
 	z-index: 0;
-	background-image: url(''), url('images/bg.jpg');
-	background-size: 256px, cover;
-	background-position: center, bottom;
-	background-repeat: repeat, no-repeat;
+	background-image: url('images/bg.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	background-color: #FFFFFF;
+}
+
+body:after {
+	background-color: #AFB6C9;
+	content: '';
+	display: block;
+	height: 100%;
+	left: 0;
+	opacity: 0;
+	position: fixed;
+	top: 0;
+	transform: scale(1);
+	transition: opacity 1s ease-in-out 0.375s, visibility 1s 0.375s;
+	visibility: hidden;
+	width: 100%;
+	z-index: 1;
+}
+
+body.is-loading:after {
+	opacity: 1;
+	visibility: visible;
 }
 
 :root {
@@ -36,6 +57,8 @@ body:before {
 	--site-language-alignment: left;
 	--site-language-direction: ltr;
 	--site-language-flex-alignment: flex-start;
+	--site-language-indent-left: 1;
+	--site-language-indent-right: 0;
 	--viewport-height: 100vh;
 }
 
@@ -94,24 +117,26 @@ a {
 
 #wrapper {
 	-webkit-overflow-scrolling: touch;
-	align-items: stretch;
+	align-items: center;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
 	min-height: var(--viewport-height);
 	overflow: hidden;
 	position: relative;
 	z-index: 2;
-	padding: 0 1.21875rem 0 1.21875rem;
+	padding: 3.0625rem 3.0625rem 3.0625rem 3.0625rem;
 }
 
 #main {
 	--alignment: center;
 	--flex-alignment: center;
-	--border-radius-tl: 0;
-	--border-radius-tr: 0;
-	--border-radius-br: 0;
-	--border-radius-bl: 0;
+	--indent-left: 1;
+	--indent-right: 1;
+	--border-radius-tl: 2rem;
+	--border-radius-tr: 2rem;
+	--border-radius-br: 2rem;
+	--border-radius-bl: 2rem;
 	align-items: center;
 	display: flex;
 	flex-grow: 0;
@@ -122,13 +147,24 @@ a {
 	text-align: var(--alignment);
 	z-index: 1;
 	background-color: transparent;
+	box-shadow: -0.033rem 0.624rem 5.875rem 1.75rem transparent;
+	border-radius: var(--border-radius-tl) var(--border-radius-tr) var(--border-radius-br) var(--border-radius-bl);
+	border-top: solid 1px transparent;
+	border-right: solid 1px transparent;
+	border-bottom: solid 1px transparent;
+	border-left: solid 1px transparent;
+	transition: opacity 1s ease 0s,transform 1s ease 0s;
 }
 
 #main > .inner {
-	--padding-horizontal: 0rem;
-	--padding-vertical: 1.625rem;
-	--spacing: 1.25rem;
-	--width: 30rem;
+	--border-radius-tl: calc(2rem - 1px);
+	--border-radius-tr: calc(2rem - 1px);
+	--border-radius-br: calc(2rem - 1px);
+	--border-radius-bl: calc(2rem - 1px);
+	--padding-horizontal: 5.25rem;
+	--padding-vertical: 6.125rem;
+	--spacing: 1.125rem;
+	--width: 44rem;
 	border-radius: var(--border-radius-tl) var(--border-radius-tr) var(--border-radius-br) var(--border-radius-bl);
 	max-width: 100%;
 	position: relative;
@@ -140,7 +176,7 @@ a {
 #main > .inner > * {
 	margin-top: var(--spacing);
 	margin-bottom: var(--spacing);
-	transition: opacity 1s ease-in-out 0s;
+	transition: opacity 0.5s ease-in-out 0.125s;
 }
 
 #main > .inner > :first-child {
@@ -179,8 +215,25 @@ a {
 	right: auto;
 }
 
+body.is-loading #main {
+	opacity: 0;
+	transform: translateY(1.6875rem);
+}
+
 body.is-loading #main > .inner > * {
 	opacity: 0;
+}
+
+#main > .inner > :nth-child(2) {
+	transition-delay: 0.25s;
+}
+
+#main > .inner > :nth-child(3) {
+	transition-delay: 0.375s;
+}
+
+#main > .inner > :nth-child(4) {
+	transition-delay: 0.5s;
 }
 
 body.is-instant #main, body.is-instant #main > .inner > *,body.is-instant #main > .inner > section > *  {
@@ -265,9 +318,22 @@ body.is-instant:after {
 	border-bottom-right-radius: inherit;
 }
 
+#image02 {
+	text-align: center;
+}
+
+#image02:not(:first-child) {
+	margin-top: 1.5rem !important;
+}
+
+#image02:not(:last-child) {
+	margin-bottom: 1.5rem !important;
+}
+
 #image02 .frame {
-	width: 24.75rem;
-	height: 4.375rem;
+	width: 73.5rem;
+	height: 5rem;
+	border-radius: 1rem;
 	transition: none;
 }
 
@@ -282,9 +348,22 @@ body.is-instant:after {
 	transition: none;
 }
 
+#image01 {
+	text-align: center;
+}
+
+#image01:not(:first-child) {
+	margin-top: 1.5rem !important;
+}
+
+#image01:not(:last-child) {
+	margin-bottom: 1.5rem !important;
+}
+
 #image01 .frame {
-	width: 27.625rem;
-	height: 23rem;
+	width: 34.25rem;
+	height: 11rem;
+	border-radius: 1rem;
 	transition: none;
 }
 
@@ -313,25 +392,25 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 	-webkit-text-fill-color: currentcolor;
 }
 
-#text03 {
+#text01 {
 	color: #FFFFFF;
-	font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-	letter-spacing: 0.025rem;
-	width: calc(100% + 0.025rem);
-	font-size: 1.25em;
-	line-height: 1.5;
+	font-family: 'Arial', sans-serif;
+	letter-spacing: -0.075rem;
+	width: 100%;
+	font-size: 1.625em;
+	line-height: 1.175;
 	font-weight: 700;
 }
 
-#text03 a {
+#text01 a {
 	text-decoration: underline;
 }
 
-#text03 a:hover {
+#text01 a:hover {
 	text-decoration: none;
 }
 
-#text03 span.p:nth-child(n + 2) {
+#text01 span.p:nth-child(n + 2) {
 	margin-top: 1rem;
 }
 
@@ -357,45 +436,57 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 	white-space: nowrap;
 }
 
-#buttons01 {
-	gap: 0.75rem;
+#buttons02 {
+	justify-content: center;
+	gap: 0.875rem;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 
-#buttons01 li a {
+#buttons02:not(:first-child) {
+	margin-top: 3.125rem !important;
+}
+
+#buttons02:not(:last-child) {
+	margin-bottom: 3.125rem !important;
+}
+
+#buttons02 li a {
 	display: inline-flex;
-	width: 27rem;
-	height: 4.5rem;
-	line-height: 4.5rem;
-	padding: 0 2.25rem;
+	width: 28.625rem;
+	height: auto;
+	line-height: 2rem;
+	padding: 0 2.5rem;
 	vertical-align: middle;
-	font-family: 'Akshar', sans-serif;
-	letter-spacing: 0.075rem;
-	padding-left: calc(0.075rem + 2.25rem);
-	font-size: 1em;
+	font-family: 'Arial', sans-serif;
+	letter-spacing: -0.075rem;
+	font-size: 1.875em;
 	font-weight: 700;
-	border-radius: 1.375rem;
-	box-shadow: 0.5rem 0rem 0.5rem 0rem transparent;
+	border-radius: 2.25rem;
+	box-shadow: 0rem 0rem 2.375rem 0rem transparent;
 	flex-direction: row-reverse;
 	justify-content: flex-end;
+	padding-bottom: 1.5625rem;
+	padding-top: 1.5625rem;
+	white-space: normal;
+	align-items: flex-start;
 	transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
-#buttons01 li a svg {
+#buttons02 li a svg {
 	display: block;
-	fill: #000000;
+	fill: #0157A4;
 	flex-grow: 0;
 	flex-shrink: 0;
-	height: 100%;
+	height: 2rem;
 	min-width: 16px;
-	width: 1em;
+	width: 1.25em;
 	margin-left: 0.5em;
-	margin-right: calc(-0.125em + 0.075rem);
+	margin-right: calc(-0.125em + 0rem);
 	transition: fill 0.25s ease;
 }
 
-#buttons01 li a .label {
+#buttons02 li a .label {
 	direction: var(--site-language-direction);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -405,23 +496,21 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 	width: 100%;
 }
 
-#buttons01 .button {
+#buttons02 .button {
 	background-color: #FFFFFF;
-	color: #000000;
-	background-image: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.008) 100%);
+	color: #0157A4;
+	background-image: linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.008) 100%);
 	background-position: 0% 0%;
 	background-repeat: repeat;
 	background-size: cover;
 }
 
-#buttons01 .button svg {
-	fill: #000000;
+#buttons02 .button svg {
+	fill: #0157A4;
 }
 
 @media (max-width: 1920px) {
-	#main > .inner {
-		--width: 30rem;
-	}
+	
 }
 
 @media (max-width: 1680px) {
@@ -434,16 +523,10 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 	html {
 		font-size: 13pt;
 	}
-	
-	#main > .inner {
-		--width: 30rem;
-	}
 }
 
 @media (max-width: 1024px) {
-	#main > .inner {
-		--width: 30rem;
-	}
+	
 }
 
 @media (max-width: 980px) {
@@ -454,23 +537,32 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 
 @media (max-width: 736px) {
 	html {
-		font-size: 9pt;
+		font-size: 10pt;
 	}
 	
-	#main {
-		--alignment: center;
-		--flex-alignment: center;
+	
+	
+	#wrapper {
+		padding: 1.75rem 1.75rem 1.75rem 1.75rem;
 	}
 	
 	#main > .inner {
-		--padding-horizontal: 1.875rem;
-		--padding-vertical: 1.625rem;
-		--spacing: 1.25rem;
+		--padding-horizontal: 2rem;
+		--padding-vertical: 3.375rem;
+		--spacing: 1.125rem;
+	}
+	
+	#image02:not(:first-child) {
+		margin-top: 1.125rem !important;
+	}
+	
+	#image02:not(:last-child) {
+		margin-bottom: 1.125rem !important;
 	}
 	
 	#image02 .frame {
-		width: 26.75rem;
-		height: 4.0625rem !important;
+		width: 73.5rem;
+		height: 6.25rem !important;
 	}
 	
 	#image02 img {
@@ -480,9 +572,17 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 		width: 100% !important;
 	}
 	
+	#image01:not(:first-child) {
+		margin-top: 1.125rem !important;
+	}
+	
+	#image01:not(:last-child) {
+		margin-bottom: 1.125rem !important;
+	}
+	
 	#image01 .frame {
-		width: 26.75rem;
-		height: 22.65625rem !important;
+		width: 34.25rem;
+		height: 13.75rem !important;
 	}
 	
 	#image01 img {
@@ -492,61 +592,87 @@ h1 span[style], h2 span[style], h3 span[style], p span[style], h1 strong, h2 str
 		width: 100% !important;
 	}
 	
-	#text03 {
-		letter-spacing: -0.075rem;
+	#text01 {
+		letter-spacing: -0.065625rem;
 		width: 100%;
-		font-size: 1.25em;
-		line-height: 1.375;
+		font-size: 1.625em;
+		line-height: 1.175;
 	}
 	
-	#buttons01 li a {
-		letter-spacing: -0.075rem;
-		font-size: 1.125em;
+	#buttons02 {
+		gap: 0.875rem;
 	}
 	
-	#buttons01 li a svg {
-		width: 1.75em;
+	#buttons02:not(:first-child) {
+		margin-top: 3.5rem !important;
+	}
+	
+	#buttons02:not(:last-child) {
+		margin-bottom: 3.5rem !important;
+	}
+	
+	#buttons02 li a {
+		letter-spacing: -0.025rem;
+		font-size: 1.625em;
+	}
+	
+	#buttons02 li a svg {
+		width: 1em;
 	}
 }
 
 @media (max-width: 480px) {
+	#wrapper {
+		padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+	}
+	
 	#main > .inner {
-		--spacing: 1.09375rem;
+		--spacing: 0.984375rem;
 	}
 	
 	#image02 .frame {
-		height: 3.25rem !important;
+		height: 5rem !important;
 	}
 	
 	#image01 .frame {
-		height: 18.125rem !important;
+		height: 11rem !important;
 	}
 	
-	#buttons01 li a {
-		width: 30rem;
+	#buttons02 {
+		flex-direction: column;
+		flex-wrap: nowrap;
+	}
+	
+	#buttons02 li a {
+		max-width: 32rem;
+		width: 100%;
 	}
 }
 
 @media (max-width: 360px) {
+	#wrapper {
+		padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	}
+	
 	#main > .inner {
-		--padding-horizontal: 1.40625rem;
-		--padding-vertical: 1.21875rem;
-		--spacing: 0.9375rem;
+		--padding-horizontal: 1.5rem;
+		--padding-vertical: 2.53125rem;
+		--spacing: 0.84375rem;
 	}
 	
 	#image02 .frame {
-		height: 2.84375rem !important;
+		height: 4.375rem !important;
 	}
 	
 	#image01 .frame {
-		height: 15.859375rem !important;
+		height: 9.625rem !important;
 	}
 	
-	#text03 {
-		font-size: 1.25em;
+	#text01 {
+		font-size: 1.5em;
 	}
 	
-	#buttons01 {
-		gap: 0.5625rem;
+	#buttons02 {
+		gap: 0.65625rem;
 	}
 }
